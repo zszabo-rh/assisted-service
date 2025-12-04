@@ -98,10 +98,10 @@ func (r *PreprovisioningImageReconciler) Reconcile(origCtx context.Context, req 
 		})
 
 	defer func() {
-		log.Info("PreprovisioningImage Reconcile ended")
+		log.Debug("PreprovisioningImage Reconcile ended")
 	}()
 
-	log.Info("PreprovisioningImage Reconcile started")
+	log.Debug("PreprovisioningImage Reconcile started")
 
 	// Retrieve PreprovisioningImage
 	image := &metal3_v1alpha1.PreprovisioningImage{}
@@ -172,7 +172,7 @@ func (r *PreprovisioningImageReconciler) Reconcile(origCtx context.Context, req 
 	// The image has been created sooner than the specified cooldown period
 	imageTimePlusCooldown := infraEnv.Status.CreatedTime.Time.Add(InfraEnvImageCooldownPeriod)
 	if imageTimePlusCooldown.After(time.Now()) {
-		log.Info("InfraEnv image is too recent. Requeuing and retrying again soon")
+		log.Debug("InfraEnv image is too recent. Requeuing and retrying again soon")
 		err = r.patchImageStatus(ctx, log, image, setCoolDownCondition)
 		if err != nil {
 			return ctrl.Result{}, err
